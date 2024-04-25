@@ -38,6 +38,7 @@ include('.\php\source.php');
 
 
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js'></script>
+    <script src='fullcalendar/locales/es.js'></script>
     <!-- dos ligas de bootstrap -->
     <script src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css'></script>
     <script src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js'></script>
@@ -76,7 +77,7 @@ include('.\php\source.php');
 
             // Multiple Select
             $(".select-1").select2({
-                placeholder: "Select Multiple Values"
+                placeholder: ""
             });
 
             // Loading array data
@@ -136,6 +137,11 @@ include('.\php\source.php');
             var calendarEl = document.getElementById('calendar');
             calendar = new FullCalendar.Calendar(calendarEl, {
                 initialView: 'dayGridMonth',
+                locale: 'es',
+                headerToolbar:{
+                    left: 'title', 
+                    right: 'prev next',
+                }
             });
             calendar.render();
         });
@@ -162,16 +168,16 @@ include('.\php\source.php');
                 eliminarEventos()
             }
             select = document.getElementById('selectPrincipal')
-            salaSelect = select.value
+            juzgadoSelect = select.value
             eventos = JSON.parse(<?php echo "'" . $eventosJSON . "'" ?>)
 
             for (let i = 0; i < eventos.length; i++) {
                 tituloCita = eventos[i].titulo
                 fechaCita = eventos[i].fecha
-                salaCita = eventos[i].sala
+                juzgadoCita = eventos[i].juzgado
         
                 //agregar evento si es de la sala que se busca
-                if (salaCita == salaSelect) {
+                if (juzgadoCita == juzgadoSelect) {
                     agregarEvento(tituloCita, fechaCita)
                 }
             }
@@ -185,15 +191,19 @@ include('.\php\source.php');
     </script>
 
     <div class="bottommargin-sm divSelect" data-select2-id="39">
-        <label for="">Seleccione una sala:</label>
-        <select id="selectPrincipal" class="select-1 form-control select2-hidden-accessible selectPrincipal" tabindex="-1" aria-hidden="true">
-            <optgroup label="Salas">
-                <option value="1">Sala 1</option>
-                <option value="2">Sala 2</option>
+        <label for="">Seleccione un juzgado:</label>
+        <select id="selectPrincipal" class="select-1 form-control select2-hidden-accessible selectPrincipal" tabindex="-1" aria-hidden="true" onchange="filtrarEventos()">
+            <optgroup label="Juzgados">
+                <option value="" selected disabled hidden></option>
+                <option value="JUZGADO ORAL DE LO PENAL DE AGUA PRIETA">JUZGADO ORAL DE LO PENAL DE AGUA PRIETA</option>
+                <option value="JUZGADO ORAL DE LO PENAL DE GUAYMAS">JUZGADO ORAL DE LO PENAL DE GUAYMAS</option>
+                <option value="JUZGADO ORAL DE LO PENAL DE HERMOSILLO">JUZGADO ORAL DE LO PENAL DE HERMOSILLO</option>
+                <option value="JUZGADO SEGUNDO ORAL MERCANTIL DE HERMOSILLO">JUZGADO SEGUNDO ORAL MERCANTIL DE HERMOSILLO</option>
+                <option value="JUZGADO PRIMERO ORAL DE ADOLESCENTES DE HERMOSILLO">JUZGADO PRIMERO ORAL DE ADOLESCENTES DE HERMOSILLO</option>
             </optgroup>
         </select>
-        <a id="botonBuscar" class="button button-circle" onclick="filtrarEventos()">Buscar eventos</a>
-        <a id="botonAgregar" class="button button-circle" data-toggle="modal" data-target="#modalForm">Agregar evento</a>
+      <!-- <a id="botonBuscar" class="button button-circle" onclick="filtrarEventos()">Buscar eventos</a>-->  
+      <!-- <a id="botonAgregar" class="button button-circle" data-toggle="modal" data-target="#modalForm">Agregar evento</a> -->  
     </div>
 
     <!-- Modal -->
