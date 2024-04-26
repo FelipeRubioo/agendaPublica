@@ -39,6 +39,7 @@ include('.\php\source.php');
 
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js'></script>
     <script src='fullcalendar/locales/es.js'></script>
+    
     <!-- dos ligas de bootstrap -->
     <script src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css'></script>
     <script src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js'></script>
@@ -67,6 +68,12 @@ include('.\php\source.php');
 
         .divSelect {
             text-align: center;
+        }
+
+        .Calendario{
+            width: 500px; /* Set the width of the div */
+            height: 500px; 
+            margin: 0 auto;
         }
     </style>
 </head>
@@ -134,13 +141,17 @@ include('.\php\source.php');
         var calendar;
 
         document.addEventListener('DOMContentLoaded', function() {
-            var calendarEl = document.getElementById('calendar');
+            var calendarEl = document.getElementById('Calendario');
             calendar = new FullCalendar.Calendar(calendarEl, {
                 initialView: 'dayGridMonth',
                 locale: 'es',
                 headerToolbar:{
                     left: 'title', 
-                    right: 'prev next',
+                    right: 'today prev next',
+                    
+                },
+                buttonText:{
+                    today: 'Hoy'
                 }
             });
             calendar.render();
@@ -202,37 +213,9 @@ include('.\php\source.php');
                 <option value="JUZGADO PRIMERO ORAL DE ADOLESCENTES DE HERMOSILLO">JUZGADO PRIMERO ORAL DE ADOLESCENTES DE HERMOSILLO</option>
             </optgroup>
         </select>
-      <!-- <a id="botonBuscar" class="button button-circle" onclick="filtrarEventos()">Buscar eventos</a>-->  
-      <!-- <a id="botonAgregar" class="button button-circle" data-toggle="modal" data-target="#modalForm">Agregar evento</a> -->  
     </div>
 
-    <!-- Modal -->
-    <div class="modal fade" id="modalForm" tabindex="-1" role="dialog" aria-labelledby="modalFormLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form action=".\php\source.php" method="POST">
-                        Titulo: <input type="text" name="titulo"><br>
-                        Sala: <input type="number" name="sala"><br>
-                        Fecha: <input type="date" name="fecha"><br>
-                        <input type="submit">
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id='calendar'></div>
+    <div id='Calendario' class="Calendario"></div>
 </body>
 
 </html>
