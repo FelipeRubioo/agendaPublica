@@ -39,7 +39,7 @@ include('.\php\source.php');
 
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js'></script>
     <script src='fullcalendar/locales/es.js'></script>
-    
+
     <!-- dos ligas de bootstrap -->
     <script src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css'></script>
     <script src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js'></script>
@@ -70,9 +70,10 @@ include('.\php\source.php');
             text-align: center;
         }
 
-        .Calendario{
-            width: 500px; /* Set the width of the div */
-            height: 500px; 
+        .Calendario {
+            width: 500px;
+            /* Set the width of the div */
+            height: 500px;
             margin: 0 auto;
         }
     </style>
@@ -145,12 +146,12 @@ include('.\php\source.php');
             calendar = new FullCalendar.Calendar(calendarEl, {
                 initialView: 'dayGridMonth',
                 locale: 'es',
-                headerToolbar:{
-                    left: 'title', 
+                headerToolbar: {
+                    left: 'title',
                     right: 'today prev next',
-                    
+
                 },
-                buttonText:{
+                buttonText: {
                     today: 'Hoy'
                 }
             });
@@ -186,7 +187,7 @@ include('.\php\source.php');
                 tituloCita = eventos[i].titulo
                 fechaCita = eventos[i].fecha
                 juzgadoCita = eventos[i].juzgado
-        
+
                 //agregar evento si es de la sala que se busca
                 if (juzgadoCita == juzgadoSelect) {
                     agregarEvento(tituloCita, fechaCita)
@@ -194,11 +195,38 @@ include('.\php\source.php');
             }
         }
 
+        function guardarEventos(){
+            eventos = calendar.getEvents()
+            if (eventos.length == 0) {
+                alert("no hay eventos para exportar")
+            }else{
+                eventosJSON = JSON.stringify(eventos)
+                console.log("eventosJSON: " +eventosJSON)
+                return eventosJSON
+            }
+            
+        }
+
         $(document).ready(function() {
             $('select-1 form-control select2-hidden-accessible').select2({
                 theme: 'classic'
             });
         });
+
+        $(document).ready(function(){
+            $('#botonExportar').click(function(){
+              eventosJSON = guardarEventos();
+                $.ajax({
+                    url: './php/source.php',
+                    type: 'POST',
+                    data: { 'eventosJSON': eventosJSON }  ,
+                    success: function(response){
+                        // handle the response from PHP if needed
+                        console.log(response);
+                    }
+                });
+            });
+        }); 
     </script>
 
     <div class="bottommargin-sm divSelect" data-select2-id="39">
@@ -214,8 +242,11 @@ include('.\php\source.php');
             </optgroup>
         </select>
     </div>
-
+    <div>
+        <button id="botonExportar">Exportar</button>
+    </div>
     <div id='Calendario' class="Calendario"></div>
 </body>
 
 </html>
+
