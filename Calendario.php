@@ -157,13 +157,33 @@ include('.\php\source.php');
             calendar.render();
         });
 
-        function agregarEvento(titulo, inicio) {
-            calendar.addEvent({
-                title: titulo,
-                start: inicio,
+        function obtenerFecha(dateTime){
+            fecha = new Date(dateTime)
+            year = fecha.getFullYear()
+            month = fecha.getMonth()+1
+            day = fecha.getDate()
+            
+            fecha = year + "-" + (month < 10 ? "0" + month : month) + "-" + (day < 10 ? "0" + day : day);
 
+            return fecha
+        }
+        function agregarEvento(tituloCita, fechaInicio, fechaFin, juez, juzgado, fechaActualizacion) {
+            date = new Date(fechaInicio)
+            anio = date.getFullYear()
+            
+            calendar.addEvent({
+                title: tituloCita,
+                start: obtenerFecha(fechaInicio),
+                extendedProps:{
+                    ejercicio: anio,
+                    fechaFin: obtenerFecha(fechaFin),
+                    juez: juez,
+                    juzgado: juzgado,
+                    fechaActualizacion: obtenerFecha(fechaActualizacion)
+                }
             })
         }
+
 
         function eliminarEventos() {
             eventos = calendar.getEvents()
@@ -183,13 +203,16 @@ include('.\php\source.php');
             eventos = JSON.parse(<?php echo "'" . $eventosJSON . "'" ?>)
 
             for (let i = 0; i < eventos.length; i++) {
-                tituloCita = eventos[i].titulo
-                fechaCita = eventos[i].fecha
-                juzgadoCita = eventos[i].juzgado
-
+                tituloCita = eventos[i].AsuntoFull
+                fechaInicio = eventos[i].FechaHoraInicioPlaneada
+                fechaFin = eventos[i].FechaHoraFinPlaneada
+                juez = eventos[i].Juez
+                juzgado = eventos[i].nombreUnidad
+                fechaActualizacion = eventos[i].FechaRegistro
+                
                 //agregar evento si es de la sala que se busca
-                if (juzgadoCita == juzgadoSelect) {
-                    agregarEvento(tituloCita, fechaCita)
+                if (juzgado == juzgadoSelect) {
+                    agregarEvento(tituloCita, fechaInicio , fechaFin, juez, juzgado, fechaActualizacion)
                 }
             }
         }
@@ -215,6 +238,7 @@ include('.\php\source.php');
         $(document).ready(function(){
             $('#botonExportar').click(function(){
               eventosJSON = guardarEventos();
+              console.log("eventos:" + eventosJSON)
                 $.ajax({
                     url: './php/source.php',
                     type: 'POST',

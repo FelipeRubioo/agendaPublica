@@ -7,7 +7,7 @@ $database = "stj";
 // Create connection
 $conn = new mysqli($servername, $username, $password, $database);
 
-$query = "SELECT * FROM evento";
+$query = "SELECT * FROM lg_audiencia";
 $result = $conn->query($query);
 
 //todos los resultados
@@ -18,10 +18,8 @@ $eventosJSON = json_encode($filas);
 $output = "";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    //$eventosJSON = $_POST['eventosJSON'];
-    //$eventos = json_decode($eventosJSON);
-
-   //echo $eventos[0]->start;
+    $eventosJSON = $_POST['eventosJSON'];
+    $eventos = json_decode($eventosJSON);
 
     $output .= '<table>
                     <tr>
@@ -35,22 +33,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <th>Nota</th>
                     </tr>
                 ';
-    
-    $output .= '<tr>
-                    <td>2024</td>
-                    <td>22-05-2024</td>
-                    <td>23-05-2024</td>
-                    <td>Felipe Rubio</td>
+    for ($i=0; $i < count($eventos) ; $i++) { 
+        $output .= '<tr>
+                    <td>'.$eventos[$i]->extendedProps->ejercicio.'</td>
+                    <td>'.$eventos[$i]->start.'</td>
+                    <td>'.$eventos[$i]->extendedProps->fechaFin.'</td>
+                    <td>'.$eventos[$i]->extendedProps->juez.'</td>
                     <td>link</td>
-                    <td>Segundo mercantil</td>
-                    <td>24-05-2024</td>
+                    <td>'.$eventos[$i]->extendedProps->juzgado .'</td>
+                    <td>'.$eventos[$i]->extendedProps->fechaActualizacion.'</td>
                     <td></td>
                 </tr>';
+    }
 
     $output.= '</table>';
 
     $archivo = fopen("Agendas.xls","w");
     fwrite($archivo, $output);
     fclose($archivo);
-    
 }
