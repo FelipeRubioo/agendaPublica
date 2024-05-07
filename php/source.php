@@ -15,35 +15,42 @@ $filas = $result->fetch_all(MYSQLI_ASSOC);
 
 $eventosJSON = json_encode($filas);
 
+$output = "";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    $eventosJSON = $_POST['eventosJSON'];
-    $eventos = json_decode($eventosJSON);
+    //$eventosJSON = $_POST['eventosJSON'];
+    //$eventos = json_decode($eventosJSON);
 
-    echo $eventos[0]->start;
+   //echo $eventos[0]->start;
 
-    // $filename = basename($_GET['file']);
-    // $filepath = 'destination/' . $filename;
-    //creamos archivo
-    $nombreArchivo = "Agenda.csv";
-    $texto = "mensaje de prueba";
-    $Archivo = fopen($nombreArchivo, "w");
-    fwrite($Archivo, $texto);
-    fclose($Archivo);
+    $output .= '<table>
+                    <tr>
+                        <th>Ejercicio</th>
+                        <th>Fecha de Inicio del Periodo que se Informa</th>
+                        <th>Fecha de Término del Periodo que se Informa</th>
+                        <th>Nombre del Juez o Magistrado</th>
+                        <th>Hipervinculo a la agenda de audiencias</th>
+                        <th>Juzgado</th>
+                        <th>Fecha de Actualizacion</th>
+                        <th>Nota</th>
+                    </tr>
+                ';
+    
+    $output .= '<tr>
+                    <td>2024</td>
+                    <td>22-05-2024</td>
+                    <td>23-05-2024</td>
+                    <td>Felipe Rubio</td>
+                    <td>link</td>
+                    <td>Segundo mercantil</td>
+                    <td>24-05-2024</td>
+                    <td></td>
+                </tr>';
 
-    // Set headers for file download
-    header('Content-Disposition: attachment; filename='.$nombreArchivo);
-    header('Content-Length: ' . filesize($nombreArchivo));
-    readfile($nombreArchivo);
-    exit();
-    //fwrite("Agenda.csv", $texto);
-    //Define Headers
-    /* header("Cache-Control: public");
-    header("Content-Description: FIle Transfer");
-    header("Content-Disposition: attachment; filename= $nombreArchivo ");
-    header("Content-Type: application/zip");
-    header("Content-Transfer-Emcoding: binary");
+    $output.= '</table>';
 
-    readfile($nombreArchivo); */
+    $archivo = fopen("Agendas.xls","w");
+    fwrite($archivo, $output);
+    fclose($archivo);
     
 }

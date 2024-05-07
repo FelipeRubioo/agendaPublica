@@ -72,7 +72,6 @@ include('.\php\source.php');
 
         .Calendario {
             width: 500px;
-            /* Set the width of the div */
             height: 500px;
             margin: 0 auto;
         }
@@ -201,7 +200,7 @@ include('.\php\source.php');
                 alert("no hay eventos para exportar")
             }else{
                 eventosJSON = JSON.stringify(eventos)
-                console.log("eventosJSON: " +eventosJSON)
+               
                 return eventosJSON
             }
             
@@ -221,8 +220,9 @@ include('.\php\source.php');
                     type: 'POST',
                     data: { 'eventosJSON': eventosJSON }  ,
                     success: function(response){
-                        // handle the response from PHP if needed
-                        console.log(response);
+                       
+                      aDescarga = document.getElementById('aDescarga')
+                      aDescarga.click()
                     }
                 });
             });
@@ -244,9 +244,9 @@ include('.\php\source.php');
     </div>
     <div>
         <button id="botonExportar">Exportar</button>
+        <a id="aDescarga" href="./php/Agendas.xls" download hidden></a>
     </div>
     <div id='Calendario' class="Calendario"></div>
 </body>
 
 </html>
-
